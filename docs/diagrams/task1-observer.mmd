@@ -1,0 +1,31 @@
+classDiagram
+direction LR
+class ICarEventObserver {
+  <<interface, Observer>>
+  +string Name
+  +OnCarEvent(CarEvent e) void
+}
+class Car {
+  <<Subject>>
+  -List~ICarEventObserver~ _observers
+  -int LowChargeThreshold$
+  +string Plate
+  +Subscribe(ICarEventObserver o) void
+  +Unsubscribe(ICarEventObserver o) void
+  +ReportCharge(int percent) void
+  +ReportCollision() void
+  +FinishTrip() void
+  -Publish(CarEventType t, string d) void
+}
+class ClientObserver { <<Concrete Observer>> }
+class FleetServiceObserver { <<Concrete Observer>> }
+class InsuranceObserver { <<Concrete Observer>> }
+class DispatcherObserver { <<Concrete Observer>> }
+class CarEvent { <<record>> }
+Car "1" o-- "0..*" ICarEventObserver : _observers
+ICarEventObserver <|.. ClientObserver
+ICarEventObserver <|.. FleetServiceObserver
+ICarEventObserver <|.. InsuranceObserver
+ICarEventObserver <|.. DispatcherObserver
+Car ..> CarEvent : publishes
+note for Car "Авто не знає конкретних отримувачів"

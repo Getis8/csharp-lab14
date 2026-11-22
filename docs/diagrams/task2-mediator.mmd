@@ -1,0 +1,36 @@
+classDiagram
+direction LR
+class IDispatchMediator {
+  <<interface, Mediator>>
+  +Notify(DispatchService s, DispatchEvent e, string plate) void
+}
+class DispatchCenter {
+  <<Concrete Mediator>>
+  +ConnectCarWash(CarWashService w) void
+  +Notify(DispatchService s, DispatchEvent e, string plate) void
+}
+class DispatchService {
+  <<abstract, Colleague>>
+  +string Name
+  +IDispatchMediator Mediator
+  #Raise(DispatchEvent e, string plate) void
+}
+class ClientApp { <<Concrete Colleague>> }
+class FleetMapService { <<Concrete Colleague>> }
+class TowService { <<Concrete Colleague>> }
+class MaintenanceService { <<Concrete Colleague>> }
+class SupportService { <<Concrete Colleague>> }
+class CarWashService { <<Concrete Colleague, нова>> }
+IDispatchMediator <|.. DispatchCenter
+DispatchService "0..*" --> "1" IDispatchMediator : Mediator
+DispatchService <|-- ClientApp
+DispatchService <|-- FleetMapService
+DispatchService <|-- TowService
+DispatchService <|-- MaintenanceService
+DispatchService <|-- SupportService
+DispatchService <|-- CarWashService
+DispatchCenter "1" --> "1" ClientApp
+DispatchCenter "1" --> "1" FleetMapService
+DispatchCenter "1" --> "1" TowService
+DispatchCenter "1" --> "1" SupportService
+note for DispatchCenter "Усі правила реагування лише тут. Служби не знають одна одну"
